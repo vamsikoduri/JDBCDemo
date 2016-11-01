@@ -13,12 +13,14 @@ public class JdbcDemo {
 
 		JdbcDaoImpl impl = ctx.getBean("jdbcDaoImpl", JdbcDaoImpl.class);
 
-		Circle circle = impl.getCircle(1);
+		/*Circle circle = impl.getCircle(1);
 		if (null != circle) {
 			System.out.println("name of the circle from db:" + circle.getName());
 		} else {
 			System.out.println("instance of circle is null");
-		}
+		}*/
+		
+		System.out.println(impl.getCircleCount());
 	}
 
 }
