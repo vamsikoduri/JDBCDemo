@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.javabrains.model.Circle;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JdbcDaoImpl {
 
 	public Circle getCircle(int circleId) {
