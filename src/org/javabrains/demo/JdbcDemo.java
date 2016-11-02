@@ -28,13 +28,13 @@ public class JdbcDemo {
 		 * Circle circle = impl.getCircleForId(1);
 		 * System.out.println(circle.getName());
 		 */
-		Circle circle = new Circle(5, "Fifth Circle");
+		Circle circle = new Circle(6, "sixth Circle");
 		impl.insertCircle(circle);
 		System.out.println("Size of the list:" + impl.getAllCircle().size());
 
-		impl.createTriangle();
+		/*impl.createTriangle();
 		impl.insertTrinagle(new Triangle(1, "first Triangle"));
-		System.out.println(impl.getTriangleForId(1).getName());
+		System.out.println(impl.getTriangleForId(1).getName());*/
 	}
 
 }

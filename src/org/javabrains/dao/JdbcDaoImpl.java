@@ -13,6 +13,9 @@ import org.javabrains.model.Triangle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +23,7 @@ public class JdbcDaoImpl {
 
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate namedTemplate;
 
 	public Circle getCircle(int circleId) {
 
@@ -91,9 +95,16 @@ public class JdbcDaoImpl {
 
 	}
 
+	/*
+	 * public void insertCircle(Circle circle) { String sql =
+	 * "Insert into CIRCLE (ID,NAME) VALUES(?,?)"; jdbcTemplate.update(sql, new
+	 * Object[] { circle.getNo(), circle.getName() }); }
+	 */
+
 	public void insertCircle(Circle circle) {
-		String sql = "Insert into CIRCLE (ID,NAME) VALUES(?,?)";
-		jdbcTemplate.update(sql, new Object[] { circle.getNo(), circle.getName() });
+		String sql = "Insert into CIRCLE (ID,NAME) VALUES(:id,:name)";
+		SqlParameterSource params = new MapSqlParameterSource("id", circle.getNo()).addValue("name", circle.getName());
+		namedTemplate.update(sql, params);
 	}
 
 	public void insertTrinagle(Triangle triangle) {
@@ -116,6 +127,7 @@ public class JdbcDaoImpl {
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		this.namedTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
 	public class CircleMapper implements RowMapper<Circle> {
