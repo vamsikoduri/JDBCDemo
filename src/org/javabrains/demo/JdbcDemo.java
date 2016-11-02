@@ -20,7 +20,8 @@ public class JdbcDemo {
 			System.out.println("instance of circle is null");
 		}*/
 		
-		System.out.println(impl.getCircleCount());
+		System.out.println("*** Circle count **** :" +impl.getCircleCount());
+		System.out.println("*** Circle Name  **** :" +impl.getCircleName(1));
 	}
 
 }
