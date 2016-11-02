@@ -1,6 +1,7 @@
 package org.javabrains.demo;
 
 import org.javabrains.dao.JdbcDaoImpl;
+import org.javabrains.dao.SimpleJdbcDaoImpl;
 import org.javabrains.model.Circle;
 import org.javabrains.model.Triangle;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +14,8 @@ public class JdbcDemo {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
 
 		JdbcDaoImpl impl = ctx.getBean("jdbcDaoImpl", JdbcDaoImpl.class);
+		
+		SimpleJdbcDaoImpl dao = ctx.getBean("simpleJdbcDaoImpl", SimpleJdbcDaoImpl.class);
 
 		/*
 		 * Circle circle = impl.getCircle(1); if (null != circle) {
@@ -28,9 +31,9 @@ public class JdbcDemo {
 		 * Circle circle = impl.getCircleForId(1);
 		 * System.out.println(circle.getName());
 		 */
-		Circle circle = new Circle(6, "sixth Circle");
-		impl.insertCircle(circle);
-		System.out.println("Size of the list:" + impl.getAllCircle().size());
+		/*Circle circle = new Circle(6, "sixth Circle");
+		impl.insertCircle(circle);*/
+		System.out.println("Size of the list:" + dao.getCircelCount());
 
 		/*impl.createTriangle();
 		impl.insertTrinagle(new Triangle(1, "first Triangle"));
