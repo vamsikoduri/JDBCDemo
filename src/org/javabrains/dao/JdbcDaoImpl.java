@@ -9,6 +9,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.javabrains.model.Circle;
+import org.javabrains.model.Triangle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class JdbcDaoImpl {
 
 	private DataSource dataSource;
-	private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+	private JdbcTemplate jdbcTemplate;
 
 	public Circle getCircle(int circleId) {
 
@@ -71,11 +72,33 @@ public class JdbcDaoImpl {
 
 	}
 
+	public Triangle getTriangleForId(int triangleId) {
+		String sql = "SELECT * FROM Triangle where ID=?";
+		return jdbcTemplate.queryForObject(sql, new Object[] { triangleId }, new TriangleMapper());
+
+	}
+
 	public List<Circle> getAllCircle() {
 		String sql = "SELECT * FROM CIRCLE";
 
 		return jdbcTemplate.query(sql, new CircleMapper());
 
+	}
+
+	public void createTriangle() {
+		String sql = "CREATE TABLE TRIANGLE (ID INTEGER,NAME VARCHAR(50))";
+		jdbcTemplate.update(sql);
+
+	}
+
+	public void insertCircle(Circle circle) {
+		String sql = "Insert into CIRCLE (ID,NAME) VALUES(?,?)";
+		jdbcTemplate.update(sql, new Object[] { circle.getNo(), circle.getName() });
+	}
+
+	public void insertTrinagle(Triangle triangle) {
+		String sql = "Insert into Triangle (ID,NAME) VALUES(?,?)";
+		jdbcTemplate.update(sql, new Object[] { triangle.getNo(), triangle.getName() });
 	}
 
 	public JdbcTemplate getJdbcTemplate() {
@@ -101,6 +124,16 @@ public class JdbcDaoImpl {
 		public Circle mapRow(ResultSet rs, int rowCount) throws SQLException {
 
 			return new Circle(rs.getInt("ID"), rs.getString("Name"));
+		}
+
+	}
+
+	public class TriangleMapper implements RowMapper<Triangle> {
+
+		@Override
+		public Triangle mapRow(ResultSet rs, int rowCount) throws SQLException {
+
+			return new Triangle(rs.getInt("ID"), rs.getString("Name"));
 		}
 
 	}
