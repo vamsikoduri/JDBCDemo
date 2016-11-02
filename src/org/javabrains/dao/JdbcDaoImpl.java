@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.javabrains.model.Circle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -51,22 +53,31 @@ public class JdbcDaoImpl {
 		return circle;
 	}
 
-	public int getCircleCount()
-	{
+	public int getCircleCount() {
 		String sql = "SELECT COUNT(*) FROM CIRCLE";
-		//jdbcTemplate.setDataSource(getDataSource());
+		// jdbcTemplate.setDataSource(getDataSource());
 		return jdbcTemplate.queryForInt(sql);
 	}
-	
-	
-	public String getCircleName(int circleId)
-	{
-		
+
+	public String getCircleName(int circleId) {
+
 		String sql = "SELECT NAME FROM CIRCLE where id=?";
-		return jdbcTemplate.queryForObject(sql, new Object[]{circleId}, String.class);
+		return jdbcTemplate.queryForObject(sql, new Object[] { circleId }, String.class);
 	}
-	
-	
+
+	public Circle getCircleForId(int circleId) {
+		String sql = "SELECT * FROM CIRCLE where ID=?";
+		return jdbcTemplate.queryForObject(sql, new Object[] { circleId }, new CircleMapper());
+
+	}
+
+	public List<Circle> getAllCircle() {
+		String sql = "SELECT * FROM CIRCLE";
+
+		return jdbcTemplate.query(sql, new CircleMapper());
+
+	}
+
 	public JdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
 	}
@@ -82,6 +93,16 @@ public class JdbcDaoImpl {
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	public class CircleMapper implements RowMapper<Circle> {
+
+		@Override
+		public Circle mapRow(ResultSet rs, int rowCount) throws SQLException {
+
+			return new Circle(rs.getInt("ID"), rs.getString("Name"));
+		}
+
 	}
 
 }
